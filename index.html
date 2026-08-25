@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎵 YouTube → MP3 Downloader</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1117;color:#fff;font-family:Arial,sans-serif;padding:20px;max-width:500px;margin:0 auto}
+h1{text-align:center;margin:40px 0 30px;font-size:28px}
+h1 span{color:#ff2d55}
+.card{background:#1a1f2e;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.input-box{width:100%;padding:15px;font-size:16px;border-radius:12px;border:2px solid #2d3748;background:#0f1117;color:#fff;margin-bottom:15px}
+.input-box:focus{outline:none;border-color:#ff2d55}
+.btn{width:100%;padding:16px;font-size:18px;border:none;border-radius:12px;background:linear-gradient(135deg,#ff2d55,#ff3d68);color:#fff;font-weight:bold;cursor:pointer;transition:transform 0.2s}
+.btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.status{margin-top:20px;padding:15px;border-radius:12px;display:none;text-align:center}
+.status.loading{background:#1e3a5f}
+.status.success{background:#1e5f3a}
+.status.error{background:#5f1e1e}
+.disclaimer{margin-top:30px;font-size:12px;color:#6b7280;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+
+<h1>🎵 <span>YouTube</span> → MP3</h1>
+<div class="card">
+  <input type="text" id="urlInput" class="input-box" placeholder="Dán link YouTube vào đây...">
+  <button id="downloadBtn" class="btn" onclick="startDownload()">⬇️ TẢI MP3 NGAY</button>
+  <div id="status" class="status"></div>
+</div>
+
+<p class="disclaimer">⚠️ Chỉ dùng cho nội dung bạn sở hữu hoặc có quyền sử dụng.<br>Tuân thủ Điều khoản Dịch vụ YouTube & luật bản quyền.</p>
+
+<script>
+function extractVideoId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function showStatus(type, text) {
+  const status = document.getElementById('status');
+  status.style.display = 'block';
+  status.className = `status ${type}`;
+  status.textContent = text;
+}
+
+async function startDownload() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) { alert('Vui lòng dán link YouTube!'); return; }
+  if (!extractVideoId(url)) { alert('Link YouTube không hợp lệ!'); return; }
+
+  showStatus('loading', '🔄 Đang mở trang chuyển đổi...');
+  
+  const backupUrl = `https://cobalt.tools/?u=${encodeURIComponent(url)}&aFormat=mp3`;
+  window.open(backupUrl, '_blank');
+  
+  showStatus('success', '✅ Đã mở trang chuyển đổi trong tab mới!\n→ Chọn MP3 → Nhấn Tải! 🎵');
+}
+</script>
+</body>
+</html>
